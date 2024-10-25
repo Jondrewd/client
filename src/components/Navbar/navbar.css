@@ -1,0 +1,32 @@
+.nav-container{
+    background: #F5F5DC;
+    width: 98%;
+    height: 60px;
+    position: fixed;
+    display: flex;
+    margin-top: .5%;
+    margin-left: 1%;
+    align-items: center;
+    justify-content: space-between;
+    border-left: 4px solid rgb(223, 164, 110);;
+    border-bottom: 6px solid #e9a05b;
+    border-radius: 4px;
+    z-index: 1;
+}
+.nav-link{
+    text-decoration: none;
+    color: #7a390e;
+    margin:0px 30px;
+    transition: .5s;
+}
+.nav-link:hover{
+    color: rgb(255, 97, 5);
+    font-size: 1.3em;
+}
+.input-navbar{
+    border-radius: 8px;
+    padding: 4px;
+    width: 700px;
+    text-align: center;
+    color: black;
+}

@@ -1,0 +1,175 @@
+.inicio-container{
+    position: absolute;
+    top: 10%;
+    left: 1%;
+    width: 98%;
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+    
+    
+}
+.layout-registrar{
+    display: flex;
+    width: 80%;
+    flex-direction: row;
+    margin-left: 10%;
+    background:  #F5F5DC;
+}
+.texto-inicio{
+    margin: auto;
+    margin-left: 5%;
+}
+.texto-inicio h1{
+    text-shadow: -2px 2px 1px #e9a05b;
+    padding: 15px;
+    color: #7a390e;
+}
+.texto-inicio p{
+    text-decoration: none;
+    color: gray;
+}
+.login-button{
+    width: 150px;
+    height: 40px;
+    margin-top: 20px;
+    border: none;
+    border-left: 2px solid rgb(223, 164, 110);;
+    border-bottom: 4px solid #e9a05b;
+    color: #7a390e;
+    transition: .1s;
+}
+.login-button:hover{
+    border: 1px solid #e9a05b;
+    border-right: 2px solid rgb(223, 164, 110);;
+    border-top: 3px solid #e9a05b;
+}
+.imagem-inicio{
+    width: 100%;
+    height: 550px;
+    background-image: url('../../assets/image 7.jpeg');
+    background-size: cover;
+    background-position-x: 50%;
+    background-position-y: 100%;
+    background-repeat: no-repeat;
+    border-left: 6px solid rgb(223, 164, 110);;
+    border-bottom: 9px solid #e9a05b;
+    border-radius: 4px;
+}
+
+.session-inicio{
+    display: flex;
+    justify-content: space-between;
+    margin: 0px 20px;
+}
+.sessions-inicio{
+    background-color: black;
+    width: 370px;
+    height: 350px;
+    border: 5px solid #e9a05b;
+    text-align: center;
+    
+}
+.sessions-inicio p{
+    width: 100%;
+    height: 100%;
+    display: none;
+    margin: auto;
+    font-size: 2em;
+    color: white;
+    transition: 10s;
+}
+.sessions-inicio:hover{
+    .p-destaques{
+        display: block;
+        backdrop-filter: blur(10px);
+    }
+}
+.destaques{
+    text-align: center;
+    color: #7a390e;
+}
+.books-inicio{
+    background: #F5F5DC;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+    border: 3px solid rgb(223, 164, 110);
+    border-left: 6px solid rgb(223, 164, 110);
+    border-bottom: 9px solid #e9a05b;
+}
+
+.book-session{
+    display: flex;
+    justify-content: space-around;
+    background: rgb(223, 164, 110);
+    box-shadow: 0px 4px 4px #7a390e;
+}
+.book-session p{
+    padding: 25px;
+    color: #7a390e;
+}
+
+.book-display{
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 5px solid #e9a05b;
+    width: 270px;
+    height: 350px;
+}
+.title{
+    color: white;
+    text-shadow: 1px 1px 3px black;
+ 
+}
+.book-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 50px;
+}
+.book-text{
+    margin: auto 0px;
+    text-align: center;
+}
+li{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 150px;
+    border-bottom: 5px solid #e9a05b;
+
+}
+.book-container h1{
+    max-width: 700px;
+}
+.book-container h2{
+    color: white;
+    text-shadow: 1px 1px 3px black;
+}
+.book-container h2, .book-container h1{
+    margin-top: 20px;
+}
+
+
+
+/* IGNORE*/
+
+.s1{
+    background: url('../../assets/fantasy.png');
+    background-size: contain;
+}
+.s2{
+    background: url('../../assets/horror.png');
+    background-size: contain;
+}
+.s3{
+    background: url('../../assets/scifi.png');
+    background-size: contain;
+}
+.s4{
+    background: url('../../assets/suspense.png');
+    background-size: contain;
+}

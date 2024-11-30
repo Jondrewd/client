@@ -1,85 +1,75 @@
-import React, {useState, useEffect} from 'react';
-import './styles.css'
+import React, { useState, useEffect } from "react";
+import "./styles.css";
 import { Link, useNavigate } from "react-router-dom";
+import Dropdown from "../../components/Dropdown/Dropdown";
 import api from "../../services/api";
 
-export default function Inicio(){
+export default function Inicio() {
+    const generoOptions = ["Ficção", "Romance", "Aventura", "Terror"];
+    const notasOptions = ["Alta para Baixa", "Baixa para Alta"];
+    const nomeOptions = ["A-Z", "Z-A"];
+    const autorOptions = ["A-Z", "Z-A"];
     const [books, setBooks] = useState([]);
+    const [size, setSize] = useState(6);
+    const [direction, setDirection] = useState("asc");
     const navigate = useNavigate();
 
-    const acessToken = localStorage.getItem('acessToken')
+    useEffect(() => {
+        api.get(`/books?page=0&size=${size}&direction=${direction}`)
+            .then((response) => setBooks(response.data.content))
+            .catch((error) => console.error("Erro ao buscar os livros:", error));
+    }, [size, direction]);
 
-useEffect(()=>{
-    api.get('/books').then(response => {
-        setBooks(response.data.content)
-    })
-    const primaryColor = books.imageUrl;
-    document.documentElement.style.setProperty('--primary-color', primaryColor);
-})
- /*{
-  "totalElements": 0,
-  "totalPages": 0,
-  "size": 0,
-  "content": [
-    {
-      "id": 0,
-      "title": "string",
-      "author": "string",
-      "rating": 0,
-      "genre": [
-        "FANTASY"
-      ],*/ 
+    const handleSelect = (option) => {
+        setDirection(option === "A-Z" ? "asc" : "desc");
+    };
 
-    return(
+    return (
         <div className="inicio-container">
-            <div className="layout-registrar">
-                <div className="imagem-inicio"> </div>
-                
-                <div className="texto-inicio">
-                    <h1>Faça login para aproveitar melhor o site.</h1>
-                    <Link to={'/login'}>
-                        <button className="login-button">login</button>
-                        <p>Registre-se</p>
-                    </Link>
+            <div className="hero">
+                <div className="hero-text">
+                    <h1>Bem-vindo ao BookLovers</h1>
+                    <p>Descubra, avalie e compartilhe seus livros favoritos.</p>
+                    <Link to="/login" className="btn-primary">Comece agora</Link>
                 </div>
             </div>
 
-            <h1 className='destaques'>Generos em destaque:</h1>
-            <div className="session-inicio">
-                
-                <div className="sessions-inicio s1"><p className='p-destaques'>Fantasy</p></div>
-                <div className="sessions-inicio s2"><p className='p-destaques'>Horror</p></div>
-                <div className="sessions-inicio s3"><p className='p-destaques'>Sci-fi</p></div>
-                <div className="sessions-inicio s4"><p className='p-destaques'>Suspense</p></div>
+            <h2 className="section-title">Gêneros em Destaque</h2>
+            <div className="genres">
+                {["Fantasy", "Horror", "Sci-fi", "Suspense"].map((genre, idx) => (
+                    <div key={idx} className="genre-card">
+                        <p>{genre}</p>
+                    </div>
+                ))}
             </div>
 
-            <div className="books-inicio"> 
-                <div className="book-session">
-                    <p>Filtrar por genero</p>
-                    <p>Ordenar por notas </p>
-                    <p>Ordenar por nome</p>
-                    <p>Ordenar por autor</p>
-                </div>
+            <h2 className="section-title">Explore Livros</h2>
+            <div className="filters">
+                <Dropdown label="Filtrar por Gênero" options={generoOptions} />
+                <Dropdown label="Ordenar por Notas" options={notasOptions} />
+                <Dropdown label="Ordenar por Nome" options={nomeOptions} onSelect={handleSelect} />
+                <Dropdown label="Ordenar por Autor" options={autorOptions} />
+            </div>
 
-                <div className='book-container'>
-                    {books.map(book => (
-                        <li>
-                            <div className="book-display"
-                                style={{backgroundImage:`url(${book.imageUrl})`}}>
-                            </div>
-                            <div className='book-text'>
-                                <h1 className="title">Titulo: {book.title}</h1>
-                                <h2 className='author'>Autor: {book.author}</h2>
-                                <h2 className='rating'>Nota: {book.rating}</h2>
-                                <h2 className='genre'> Genero: {book.genre}</h2>
-                            </div>
-                        </li>
-                        ))}
-                    
-                </div>
-                
+            <div className="books">
+                {books.map((book) => (
+                    <div key={book.id} className="book-card">
+                        <div
+                            className="book-cover"
+                            style={{ backgroundImage: `url(${book.imageUrl})` }}
+                        ></div>
+                        <div className="book-info">
+                            <h3>{book.title}</h3>
+                            <p>{book.author}</p>
+                            <p>{book.genre.join(", ")}</p>
+                            <p>Nota: {book.rating}</p>
+                            <button onClick={() => navigate(`/books/${book.id}`)} className="btn-secondary">
+                                Ver Detalhes
+                            </button>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
-
-    )
+    );
 }

@@ -1,0 +1,87 @@
+.profile-page {
+max-width: 1200px;
+margin: auto;
+padding: 20px;
+}
+
+.profile-header {
+display: flex;
+align-items: center;
+margin-bottom: 70px;
+}
+
+.profile-image {
+width: 150px;
+height: 150px;
+border-radius: 50%;
+object-fit: cover;
+margin-right: 70px;
+}
+
+.profile-info h1 {
+font-size: 2rem;
+margin: 0;
+}
+
+.profile-info p {
+margin-top: 10px;
+}
+
+.profile-stats {
+display: flex;
+justify-content: space-between;
+margin: 30px 0;
+}
+
+.stat {
+text-align: center;
+}
+
+.stat h2 {
+font-size: 1.2rem;
+margin: 0;
+}
+
+.stat p {
+font-size: 1.5rem;
+font-weight: bold;
+color: #ff6700;
+}
+
+.profile-lists .list {
+margin-bottom: 30px;
+}
+
+.list-items {
+display: flex;
+gap: 15px;
+overflow-x: auto;
+}
+
+.book-card-profile {
+width: 120px;
+height: 180px;
+background-size: cover;
+background-position: center;
+border-radius: 8px;
+display: flex;
+align-items: flex-end;
+justify-content: center;
+padding: 10px;
+color: white;
+font-size: 0.9rem;
+text-align: center;
+}
+
+.profile-activity ul {
+list-style: none;
+padding: 0;
+}
+
+.profile-activity li {
+background: #fff;
+margin: 10px 0;
+padding: 10px 15px;
+border-radius: 8px;
+box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}

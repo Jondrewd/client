@@ -3,6 +3,7 @@ import "./styles.css";
 import { Link, useNavigate } from "react-router-dom";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import api from "../../services/api";
+import Button from "../../components/Button/Button";
 
 export default function Inicio() {
     const generoOptions = ["Ficção", "Romance", "Aventura", "Terror"];
@@ -28,7 +29,7 @@ export default function Inicio() {
         <div className="inicio-container">
             <div className="hero">
                 <div className="hero-text">
-                    <h1>Bem-vindo ao BookLovers</h1>
+                    <h1>Bem-vindo ao </h1>
                     <p>Descubra, avalie e compartilhe seus livros favoritos.</p>
                     <Link to="/login" className="btn-primary">Comece agora</Link>
                 </div>
@@ -48,24 +49,21 @@ export default function Inicio() {
                 <Dropdown label="Filtrar por Gênero" options={generoOptions} />
                 <Dropdown label="Ordenar por Notas" options={notasOptions} />
                 <Dropdown label="Ordenar por Nome" options={nomeOptions} onSelect={handleSelect} />
-                <Dropdown label="Ordenar por Autor" options={autorOptions} />
             </div>
 
             <div className="books">
                 {books.map((book) => (
-                    <div key={book.id} className="book-card">
+                    <div key={book.id} className="book-card-inicio">
                         <div
                             className="book-cover"
                             style={{ backgroundImage: `url(${book.imageUrl})` }}
                         ></div>
-                        <div className="book-info">
+                        <div className="book-info-inicio">
                             <h3>{book.title}</h3>
                             <p>{book.author}</p>
                             <p>{book.genre.join(", ")}</p>
                             <p>Nota: {book.rating}</p>
-                            <button onClick={() => navigate(`/books/${book.id}`)} className="btn-secondary">
-                                Ver Detalhes
-                            </button>
+                            <Button bookTitle={book.title}/>
                         </div>
                     </div>
                 ))}

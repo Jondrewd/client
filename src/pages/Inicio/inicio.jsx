@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import api from "../../services/api";
 import Button from "../../components/Button/Button";
@@ -9,11 +9,9 @@ export default function Inicio() {
     const generoOptions = ["Ficção", "Romance", "Aventura", "Terror"];
     const notasOptions = ["Alta para Baixa", "Baixa para Alta"];
     const nomeOptions = ["A-Z", "Z-A"];
-    const autorOptions = ["A-Z", "Z-A"];
     const [books, setBooks] = useState([]);
     const [size, setSize] = useState(6);
     const [direction, setDirection] = useState("asc");
-    const navigate = useNavigate();
 
     useEffect(() => {
         api.get(`/books?page=0&size=${size}&direction=${direction}`)
@@ -29,15 +27,15 @@ export default function Inicio() {
         <div className="inicio-container">
             <div className="hero">
                 <div className="hero-text">
-                    <h1>Bem-vindo ao </h1>
-                    <p>Descubra, avalie e compartilhe seus livros favoritos.</p>
+                    <h1>Descubra e Compartilhe Livros</h1>
+                    <p>Leia, avalie e explore livros incríveis!</p>
                     <Link to="/login" className="btn-primary">Comece agora</Link>
                 </div>
             </div>
 
-            <h2 className="section-title">Gêneros em Destaque</h2>
+            <h2 className="section-title">Gêneros Populares</h2>
             <div className="genres">
-                {["Fantasy", "Horror", "Sci-fi", "Suspense"].map((genre, idx) => (
+                {["Ficção", "Fantasia", "Suspense", "Romance"].map((genre, idx) => (
                     <div key={idx} className="genre-card">
                         <p>{genre}</p>
                     </div>
@@ -45,17 +43,13 @@ export default function Inicio() {
             </div>
 
             <h2 className="section-title">Explore Livros</h2>
-            <div className="filters">
-                <Dropdown label="Filtrar por Gênero" options={generoOptions} />
-                <Dropdown label="Ordenar por Notas" options={notasOptions} />
-                <Dropdown label="Ordenar por Nome" options={nomeOptions} onSelect={handleSelect} />
-            </div>
+            
 
-            <div className="books">
+            <div className="books-inicio">
                 {books.map((book) => (
                     <div key={book.id} className="book-card-inicio">
                         <div
-                            className="book-cover"
+                            className="book-cover-inicio"
                             style={{ backgroundImage: `url(${book.imageUrl})` }}
                         ></div>
                         <div className="book-info-inicio">
@@ -63,7 +57,7 @@ export default function Inicio() {
                             <p>{book.author}</p>
                             <p>{book.genre.join(", ")}</p>
                             <p>Nota: {book.rating}</p>
-                            <Button bookTitle={book.title}/>
+                            <Button bookTitle={book.title} />
                         </div>
                     </div>
                 ))}

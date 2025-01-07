@@ -10,6 +10,9 @@ export default function BookDetails() {
   const [relatedBooks, setRelatedBooks] = useState([]);
   const [reviews, setReviews] = useState([]);
 
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isReadLater, setIsReadLater] = useState(false);
+
   useEffect(() => {
     const fetchBookDetails = async () => {
       try {
@@ -36,6 +39,16 @@ export default function BookDetails() {
     fetchBookDetails();
   }, [title]);
 
+  const handleAddToFavorites = () => {
+    setIsFavorite(true);
+    alert("Livro adicionado aos favoritos!");
+  };
+
+  const handleAddToReadLater = () => {
+    setIsReadLater(true);
+    alert("Livro adicionado à lista para ler mais tarde!");
+  };
+
   if (!book) {
     return <p>Carregando...</p>;
   }
@@ -57,6 +70,23 @@ export default function BookDetails() {
             <p><strong>Avaliação:</strong> ⭐ {book.rating} / 5</p>
           </div>
           <a href={book.purchaseLink} target="_blank" rel="noopener noreferrer" className="buy-button">Comprar Agora</a>
+
+          <div className="action-buttons">
+            <button
+              className={`action-button ${isFavorite ? "added" : ""}`}
+              onClick={handleAddToFavorites}
+              disabled={isFavorite}
+            >
+              {isFavorite ? "Adicionado aos Favoritos" : "Adicionar aos Favoritos"}
+            </button>
+            <button
+              className={`action-button ${isReadLater ? "added" : ""}`}
+              onClick={handleAddToReadLater}
+              disabled={isReadLater}
+            >
+              {isReadLater ? "Adicionado para Ler Mais Tarde" : "Adicionar para Ler Mais Tarde"}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -84,7 +114,7 @@ export default function BookDetails() {
               <img src={relatedBook.imageUrl} alt={relatedBook.title} />
               <h3>{relatedBook.title}</h3>
               <p>{relatedBook.author}</p>
-              <Button bookTitle={relatedBook.title}/>
+              <Button bookTitle={relatedBook.title} />
             </div>
           ))}
         </div>

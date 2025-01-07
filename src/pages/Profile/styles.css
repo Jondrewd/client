@@ -1,87 +1,196 @@
-.profile-page {
-max-width: 1200px;
-margin: auto;
-padding: 20px;
-}
 
-.profile-header {
-display: flex;
-align-items: center;
-margin-bottom: 70px;
-}
+  .profile-page {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+  }
+  
 
-.profile-image {
-width: 150px;
-height: 150px;
-border-radius: 50%;
-object-fit: cover;
-margin-right: 70px;
-}
+  .header-profile {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+  }
+  
+  .image-profile {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+    border: 2px solid #ff6700;
+  }
+  
+  .info-profile h1 {
+    margin: 0;
+    font-size: 1.8rem;
+  }
+  
+  .info-profile p {
+    margin-top: 5px;
+    color: #555;
+  }
+  
+  .stats-profile {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 0;
+  }
+  
+  .stat-box-profile {
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    margin: 0 10px;
 
-.profile-info h1 {
-font-size: 2rem;
-margin: 0;
-}
+  }
+  .stat-box-profile:nth-child(1), .stat-box-profile:nth-child(2){
+    cursor: pointer;
+  }
+  
+  .stat-box-profile h2 {
+    font-size: 1rem;
+    margin: 0;
+    color: #777;
+  }
+  
+  .stat-box-profile p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ff6700;
+  }
 
-.profile-info p {
-margin-top: 10px;
-}
+  .book-list-profile {
+    margin-bottom: 30px;
+  }
+  
+  .book-list-profile h2 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+  
+  .book-items-profile {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .book-card-profile {
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 120px;
+    text-align: center;
+    overflow: hidden;
+  }
+  
+  .book-image-profile {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+  }
+  
+  .book-title-profile {
+    padding: 10px;
+    font-size: 0.9rem;
+    color: #333;
+  }
 
-.profile-stats {
-display: flex;
-justify-content: space-between;
-margin: 30px 0;
-}
+  .activity-profile ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .activity-list-profile li {
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 
-.stat {
-text-align: center;
-}
+  .loading-profile,
+  .error-profile {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #ff6700;
+    margin-top: 50px;
+  }
 
-.stat h2 {
-font-size: 1.2rem;
-margin: 0;
+.modal-profile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content-profile {
+    background: #414141;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-content-profile h2 {
+    margin-bottom: 20px;
+  }
+  
+  .modal-content-profile ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .modal-content-profile li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .user-image-profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+  
+  .close-modal-profile {
+    background: #ff6700;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+  
+  .settings-button-profile {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    left: 70%;
+    color: white;
+  }
+  @media (max-width: 768px) {
+    .settings-button-profile{
+        left: 80%;
+        top: 14%;
+    }
+    .info-profile h1{
+        margin-left: 10px;
+    }
 }
-
-.stat p {
-font-size: 1.5rem;
-font-weight: bold;
-color: #ff6700;
-}
-
-.profile-lists .list {
-margin-bottom: 30px;
-}
-
-.list-items {
-display: flex;
-gap: 15px;
-overflow-x: auto;
-}
-
-.book-card-profile {
-width: 120px;
-height: 180px;
-background-size: cover;
-background-position: center;
-border-radius: 8px;
-display: flex;
-align-items: flex-end;
-justify-content: center;
-padding: 10px;
-color: white;
-font-size: 0.9rem;
-text-align: center;
-}
-
-.profile-activity ul {
-list-style: none;
-padding: 0;
-}
-
-.profile-activity li {
-background: #fff;
-margin: 10px 0;
-padding: 10px 15px;
-border-radius: 8px;
-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-}
+  

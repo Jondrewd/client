@@ -2,22 +2,37 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiBookOpen, FiUser, FiLock, FiArrowRight } from 'react-icons/fi';
 import api from '../../services/api';
-import './styles.css';
 
-export default function Login() {
+
+export default function Register() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [rememberMe, setRememberMe] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordError, setPasswordError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleLoginSuccess = () => {
-        sessionStorage.setItem("isLoggedIn", "true");
-    };
+    function validatePassword(password) {
+        const regex = /^(?=.*[A-Z])(?=.*[!@#$&*]).{8,}$/;
+        return regex.test(password);
+    }
 
-    async function login(e) {
+    async function register(e) {
         e.preventDefault();
         setIsLoading(true);
+        setPasswordError('');
+
+        if (password !== confirmPassword) {
+            setPasswordError("As senhas não coincidem.");
+            setIsLoading(false);
+            return;
+        }
+
+        if (!validatePassword(password)) {
+            setPasswordError("A senha deve ter pelo menos 8 caracteres, incluindo 1 letra maiúscula e 1 caractere especial.");
+            setIsLoading(false);
+            return;
+        }
 
         const data = {
             username,
@@ -25,19 +40,12 @@ export default function Login() {
         };
 
         try {
-            const response = await api.post('auth/signin', data);
-            
+            const response = await api.post('auth/register', data);
             sessionStorage.setItem('username', username);
             sessionStorage.setItem('accessToken', response.data.accessToken);
-            if (rememberMe) {
-                localStorage.setItem('username', username);
-                localStorage.setItem('accessToken', response.data.accessToken);
-            }
-
-            handleLoginSuccess();
             navigate('/');
         } catch (error) {
-            alert('Usuário ou senha incorretos.');
+            alert("Erro ao registrar. Tente novamente.");
             setIsLoading(false);
         }
     }
@@ -48,10 +56,10 @@ export default function Login() {
                 <div className="login-header">
                     <FiBookOpen className="login-logo-icon" />
                     <h1>GonkLib</h1>
-                    <p>Conecte-se para explorar o mundo dos livros</p>
+                    <p>Crie sua conta para explorar o mundo dos livros</p>
                 </div>
 
-                <form onSubmit={login} className="login-form">
+                <form onSubmit={register} className="login-form">
                     <div className="input-group">
                         <label htmlFor="username">
                             <FiUser className="input-icon" />
@@ -78,27 +86,30 @@ export default function Login() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            autoComplete="current-password"
+                            autoComplete="new-password"
                         />
                     </div>
 
-                    <div className="login-options">
-                        <label className="remember-me">
-                            <input
-                                type="checkbox"
-                                checked={rememberMe}
-                                onChange={(e) => setRememberMe(e.target.checked)}
-                            />
-                            <span>Lembrar de mim</span>
+                    <div className="input-group">
+                        <label htmlFor="confirmPassword">
+                            <FiLock className="input-icon" />
+                            <span>Confirme sua senha</span>
                         </label>
-                        <button 
-                            type="button" 
-                            className="forgot-password"
-                            onClick={() => navigate('/forgot-password')}
-                        >
-                            Esqueceu a senha?
-                        </button>
+                        <input
+                            id="confirmPassword"
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            required
+                            autoComplete="new-password"
+                        />
                     </div>
+
+                    {passwordError && (
+                        <div className="error-message">
+                            {passwordError}
+                        </div>
+                    )}
 
                     <button 
                         type="submit" 
@@ -109,14 +120,14 @@ export default function Login() {
                             <span className="loading-spinner-login"></span>
                         ) : (
                             <>
-                                Entrar <FiArrowRight className="button-icon" />
+                                Registrar <FiArrowRight className="button-icon" />
                             </>
                         )}
                     </button>
                 </form>
 
                 <div className="login-footer">
-                    <p>Não tem uma conta? <button onClick={() => navigate('/register')}>Cadastre-se</button></p>
+                    <p>Já tem uma conta? <button onClick={() => navigate('/login')}>Faça login</button></p>
                 </div>
             </div>
         </div>

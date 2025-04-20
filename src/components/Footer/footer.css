@@ -1,0 +1,94 @@
+.GonkLib-footer {
+    background: var(--footer-bg); 
+    border-top: 1px solid #e5e7eb;
+    margin-top: 4rem;
+  }
+  
+  .footer-content {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .footer-content {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+  }
+  
+  .footer-brand {
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .footer-logo-icon {
+    color: #4f46e5;
+    font-size: 1.25rem;
+  }
+  
+  .footer-logo-text {
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+  
+  .footer-tagline {
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+  
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .footer-links {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  .link-column {
+    min-width: 10rem;
+  }
+  
+  .link-title {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+  
+  .link-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .footer-link {
+    color: #6b7280;
+    font-size: 0.875rem;
+    transition: color 0.2s;
+  }
+  
+  .footer-link:hover {
+    color: #4f46e5;
+  }
+  
+  .footer-copyright {
+    border-top: 1px solid #e5e7eb;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6b7280;
+  }

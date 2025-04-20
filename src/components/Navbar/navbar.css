@@ -1,28 +1,96 @@
-.nav-container{
-    width: 98%;
-    height: 60px;
+ .GonkLib-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--navbar-bg); 
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .header-content {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0.75rem 1rem;
     display: flex;
-    margin-left: 1%;
-    margin-top: .5%;
     align-items: center;
-    justify-content: center;
-    gap: 20px;
-    backdrop-filter: blur(4px);
-    z-index: 0;
-}
-.nav-link{
-    text-decoration: none;
-    margin:0px 30px;
-    transition: .5s;
-}
-.nav-link:hover{
-    color: rgb(158, 157, 157);
-}
-.input-navbar{
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.295);
-    padding: 4px;
-    width: 300px;
-    text-align: center;
-
-}
+    justify-content: space-between;
+  }
+  
+  .logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .logo-icon {
+    color: #4f46e5;
+    font-size: 1.5rem;
+  }
+  
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  .search-container {
+    flex: 1;
+    max-width: 42rem;
+    margin: 0 2rem;
+  }
+  
+  .search-input-wrapper {
+    position: relative;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 58%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding-left: 2.5rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid #d1d5db;
+    outline: none;
+  }
+  
+  .search-input:focus {
+    border-color: transparent;
+    box-shadow: 0 0 0 2px #4f46e5;
+  }
+  
+  .nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .nav-icon-button {
+    padding: 0.5rem;
+    border-radius: 9999px;
+    transition: background-color 0.2s;
+  }
+  
+  .nav-icon-button:hover {
+    background-color: #f3f4f6;
+  }
+  
+  .nav-icon, .user-avatar {
+    color: #4b5563;
+  }
+  
+  .user-avatar {
+    background-color: #f0f0f0;
+    border-radius: 9999px;
+  }

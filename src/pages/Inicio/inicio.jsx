@@ -221,6 +221,12 @@ const Inicio = () => {
             ))}
           </div>
         </section>
+        <button 
+          className="view-all-button"
+          onClick={() => navigate('/books')}
+        >
+          Ver Mais
+      </button>
 
         {activeTab === 'explore' && Object.entries(booksByCategory).map(([category, books]) => (
           <section key={category} className="category-section">

@@ -1,156 +1,196 @@
-import React, { useState, useEffect } from "react";
-import "./styles.css";
-import { IoArrowForward } from "react-icons/io5";
-import { FaCog } from "react-icons/fa";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FiUser, FiBookOpen, FiBookmark, FiStar, FiUsers, FiHeart } from 'react-icons/fi';
+import api from '../../services/api';
+import './styles.css';
 
-export default function Profile() {
+const Profile = () => {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
-  const [favorites, setFavorites] = useState([]);
-  const [toRead, setToRead] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [followers, setFollowers] = useState([]);
-  const [following, setFollowing] = useState([]);
-  const [recentActivity, setRecentActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [modalType, setModalType] = useState(null);
-
-  const username = sessionStorage.getItem("username");
-  const apiEndpoint = `http://localhost:8080/profile/username/${username}`;
+  const [activeTab, setActiveTab] = useState('reviews');
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await fetch(apiEndpoint);
-        if (!response.ok) {
-          throw new Error("Erro ao buscar os dados do perfil.");
+        setLoading(true);
+        const username = sessionStorage.getItem('username');
+        
+        if (!username) {
+          throw new Error('Nenhum usuário logado');
         }
 
-        const data = await response.json();
-        setProfile(data);
-        setFavorites(data.favoriteBooks || []);
-        setToRead(data.wishList || []);
-        setHistory(data.historyBooks || []);
-        setFollowers(data.followers || []);
-        setFollowing(data.following || []);
-        setRecentActivity(data.recentActivity || []);
-      } catch (err) {
-        setError(err.message);
+        const response = await api.get(`/profile/username/${username}`);
+        setProfile(response.data);
+        
+      } catch (error) {
+        setError(error.response?.data?.message || error.message);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProfileData();
-  }, [apiEndpoint]);
-
-  const openModal = (type) => {
-    setModalType(type);
-  };
-
-  const closeModal = () => {
-    setModalType(null);
-  };
-
-  const goToSettings = () => {
-    window.location.href = "/settings";
-  };
+  }, []);
 
   if (loading) {
-    return <div className="loading-profile">Carregando...</div>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="error-profile">Erro: {error}</div>;
+    return (
+      <div className="error-container">
+        <h2>Perfil não encontrado</h2>
+        <p>{error}</p>
+        <button 
+          className="action-button"
+          onClick={() => navigate('/login')}
+        >
+          Ir para Login
+        </button>
+      </div>
+    );
+  }
+
+  if (!profile) {
+    return null;
   }
 
   return (
-    <div className="profile-page">
-      <header className="header-profile">
-        <img
-          src={profile.profilePicture}
-          alt="Profile"
-          className="image-profile"
-        />
-        <div className="info-profile">
-          <h1>{profile.username}</h1>
-          <p>{profile.biography}</p>
+    <div className="profile-container">
+      <div className="profile-header">
+        <div className="profile-avatar">
+          {profile.urlIcon ? (
+            <img src={profile.urlIcon} alt={profile.username} />
+          ) : (
+            <FiUser size={48} />
+          )}
         </div>
-        <button className="settings-button-profile" onClick={goToSettings}>
-          <FaCog size={24} />
-        </button>
-      </header>
-      <section className="stats-profile">
-        <div className="stat-box-profile" onClick={() => openModal("followers")}>
-          <h2>Seguidores</h2>
-          <p>{followers.length}</p>
-        </div>
-        <div className="stat-box-profile" onClick={() => openModal("following")}>
-          <h2>Seguindo</h2>
-          <p>{following.length}</p>
-        </div>
-        <div className="stat-box-profile">
-          <h2>Favoritos</h2>
-          <p>{favorites.length}</p>
-        </div>
-      </section>
-      <section className="lists-profile">
-        <BookList title="Favoritos" books={favorites} />
-        <BookList title="Ver Mais Tarde" books={toRead} />
-        <BookList title="Histórico" books={history} />
-      </section>
-      <section className="activity-profile">
-        <h2>Atividade Recente</h2>
-        <ul className="activity-list-profile">
-          {recentActivity.map((activity, index) => (
-            <li key={index}>{activity}</li>
-          ))}
-        </ul>
-      </section>
-      {modalType && (
-        <Modal
-          type={modalType}
-          data={modalType === "followers" ? followers : following}
-          onClose={closeModal}
-        />
-      )}
-    </div>
-  );
-}
-
-function Modal({ type, data, onClose }) {
-  return (
-    <div className="modal-profile">
-      <div className="modal-content-profile">
-        <h2>{type === "followers" ? "Seguidores" : "Seguindo"}</h2>
-        <ul>
-          {data.map((user, index) => (
-            <li key={index}>
-              <img src={user.profilePicture} alt={user.name} className="user-image-profile" />
-              <span>{user.name}</span>
-            </li>
-          ))}
-        </ul>
-        <button className="close-modal-profile" onClick={onClose}>
-          Fechar
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function BookList({ title, books }) {
-  return (
-    <div className="book-list-profile">
-      <h2>{title}</h2>
-      <div className="book-items-profile">
-        {books.map((book) => (
-          <div key={book.id} className="book-card-profile">
-            <img src={book.imageUrl} alt={book.title} className="book-image-profile" />
-            <p className="book-title-profile">{book.title}</p>
+        <div className="profile-info">
+          <h1>@{profile.username}</h1>
+          {profile.biography && (
+            <p className="profile-bio">{profile.biography}</p>
+          )}
+          
+          <div className="profile-stats">
+            <div className="stat">
+              <FiUsers className="icon" />
+              <span>seguidores {profile.followers.length} </span>
+            </div>
+            <div className="stat">
+              <FiUser className="icon" />
+              <span>Seguindo {profile.following.length}</span>
+            </div>
           </div>
-        ))}
+        </div>
+      </div>
+
+      <div className="profile-tabs">
+        <button 
+          className={`tab ${activeTab === 'reviews' ? 'active' : ''}`}
+          onClick={() => setActiveTab('reviews')}
+        >
+          <FiStar /> Avaliações ({profile.reviews.length})
+        </button>
+        <button 
+          className={`tab ${activeTab === 'favorites' ? 'active' : ''}`}
+          onClick={() => setActiveTab('favorites')}
+        >
+          <FiHeart /> Favoritos ({profile.favoriteBooks.length})
+        </button>
+        <button 
+          className={`tab ${activeTab === 'wishlist' ? 'active' : ''}`}
+          onClick={() => setActiveTab('wishlist')}
+        >
+          <FiBookmark /> Quero Ler ({profile.wishList.length})
+        </button>
+      </div>
+
+      <div className="profile-content">
+        {activeTab === 'reviews' && (
+          <div className="reviews-list">
+            {profile.reviews.length > 0 ? (
+              profile.reviews.map(review => (
+                <div key={review.id} className="review-card">
+                  <div className="book-info">
+                    <h3>{review.bookTitle}</h3>
+                    <div className="rating">
+                      {[...Array(5)].map((_, i) => (
+                        <FiStar 
+                          key={i} 
+                          className={i < review.rating ? 'filled' : ''} 
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="review-text">{review.content}</p>
+                </div>
+              ))
+            ) : (
+              <p className="empty-message">Nenhuma avaliação encontrada</p>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'favorites' && (
+          <div className="books-grid">
+            {profile.favoriteBooks.length > 0 ? (
+              profile.favoriteBooks.map(book => (
+                <div 
+                  key={book.id} 
+                  className="book-card"
+                  onClick={() => navigate(`/bookDetails/${encodeURIComponent(book.title)}`)}
+                >
+                  <div className="book-cover">
+                    {book.imageUrl ? (
+                      <img src={book.imageUrl} alt={book.title} />
+                    ) : (
+                      <FiBookOpen size={32} />
+                    )}
+                  </div>
+                  <h3>{book.title}</h3>
+                  <p className="author">{book.author}</p>
+                </div>
+              ))
+            ) : (
+              <p className="empty-message">Nenhum livro favorito</p>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'wishlist' && (
+          <div className="books-grid">
+            {profile.wishList.length > 0 ? (
+              profile.wishList.map(book => (
+                <div 
+                  key={book.id} 
+                  className="book-card"
+                  onClick={() => navigate(`/bookDetails/${encodeURIComponent(book.title)}`)}
+                >
+                  <div className="book-cover">
+                    {book.imageUrl ? (
+                      <img src={book.imageUrl} alt={book.title} />
+                    ) : (
+                      <FiBookOpen size={32} />
+                    )}
+                  </div>
+                  <h3>{book.title}</h3>
+                  <p className="author">{book.author}</p>
+                </div>
+              ))
+            ) : (
+              <p className="empty-message">Lista de desejos vazia</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
-}
+};
+
+export default Profile;

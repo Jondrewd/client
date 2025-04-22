@@ -1,124 +1,183 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import "./styles.css";
-import Button from "../../components/Button/Button";
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { FiArrowLeft, FiStar, FiBookOpen, FiBookmark, FiShare2 } from 'react-icons/fi';
+import api from '../../services/api';
+import './styles.css';
 
-export default function BookDetails() {
-  const { title } = useParams(); 
+const BookDetails = () => {
+  const { title } = useParams();
+  const navigate = useNavigate();
   const [book, setBook] = useState(null);
   const [relatedBooks, setRelatedBooks] = useState([]);
-  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isReadLater, setIsReadLater] = useState(false);
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
+  const toggleBookmark = () => {
+    setIsBookmarked(!isBookmarked);
+  };
+
+  const shareBook = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: `Recomendo o livro: ${book.title}`,
+        text: `Estou lendo ${book.title} por ${book.author} e recomendo!`,
+        url: window.location.href,
+      }).catch(console.error);
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Link copiado para a área de transferência!');
+    }
+  };
 
   useEffect(() => {
     const fetchBookDetails = async () => {
       try {
-        const bookResponse = await axios.get(
-          `http://localhost:8080/books/title/${title}?page=0&size=1&direction=asc`
-        );
-        const bookData = bookResponse.data.content[0]; 
-        setBook(bookData);
-
-        const relatedResponse = await axios.get(
-          `http://localhost:8080/books?genre=${bookData.genre}&page=0&size=4&direction=asc`
-        );
-        setRelatedBooks(relatedResponse.data.content);
-
-        const reviewsResponse = await axios.get(
-          `http://localhost:8080/books/${bookData.id}/reviews`
-        );
-        setReviews(reviewsResponse.data.content);
-      } catch (error) {
-        console.error("Erro ao carregar os detalhes do livro:", error);
+        setLoading(true);
+        
+        const bookResponse = await api.get(`/books/title/${decodeURIComponent(title)}`);
+        
+        if (bookResponse.data.content && bookResponse.data.content.length > 0) {
+          const foundBook = bookResponse.data.content[0];
+          setBook(foundBook);
+          
+          if (foundBook.genre && foundBook.genre.length > 0) {
+            const relatedResponse = await api.get(
+              `/books?genre=${foundBook.genre[0]}&size=4&exclude=${title}`
+            );
+            setRelatedBooks(relatedResponse.data.content || []);
+          }
+        } else {
+          setError("Livro não encontrado");
+        }
+        
+      } catch (err) {
+        setError("Erro ao carregar detalhes do livro");
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchBookDetails();
   }, [title]);
 
-  const handleAddToFavorites = () => {
-    setIsFavorite(true);
-    alert("Livro adicionado aos favoritos!");
-  };
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner-bookdetails"></div>
+        <p>Carregando livro...</p>
+      </div>
+    );
+  }
 
-  const handleAddToReadLater = () => {
-    setIsReadLater(true);
-    alert("Livro adicionado à lista para ler mais tarde!");
-  };
+  if (error) {
+    return (
+      <div className="error-container">
+        <p>{error}</p>
+        <button onClick={handleGoBack} className="back-button">
+          Voltar
+        </button>
+      </div>
+    );
+  }
 
   if (!book) {
-    return <p>Carregando...</p>;
+    return null;
   }
 
   return (
     <div className="book-details-container">
-      <div className="book-details-main">
-        <img src={book.imageUrl} alt={book.title} className="book-details-image" />
-        <div className="book-details-info">
-          <h1 className="book-title">{book.title}</h1>
-          <p className="book-author">
-            Por: <a href={`/author/${book.author.id}`}>{book.author}</a>
-          </p>
-          <p className="book-description">{book.description}</p>
-          <div className="book-details-extra">
-            <p><strong>Gênero:</strong> {book.genre}</p>
-            <p><strong>Páginas:</strong> {book.pageCount}</p>
-            <p><strong>Publicado em:</strong> {new Date(book.publishedDate).toLocaleDateString()}</p>
-            <p><strong>Avaliação:</strong> ⭐ {book.rating} / 5</p>
+      <button onClick={handleGoBack} className="back-button">
+        <FiArrowLeft /> Voltar
+      </button>
+      
+      <div className="book-main-content">
+        <div className="book-cover-container">
+          {book.imageUrl ? (
+            <img src={book.imageUrl} alt={book.title} className="book-details-cover" />
+          ) : (
+            <div className="book-cover-placeholder">
+              <FiBookOpen size={48} />
+            </div>
+          )}
+          <div className="book-actions">
+            <button 
+              onClick={toggleBookmark} 
+              className={`action-button ${isBookmarked ? 'bookmarked' : ''}`}
+            >
+              <FiBookmark /> {isBookmarked ? 'Salvo' : 'Salvar'}
+            </button>
+            <button onClick={shareBook} className="action-button">
+              <FiShare2 /> Compartilhar
+            </button>
           </div>
-          <a href={book.purchaseLink} target="_blank" rel="noopener noreferrer" className="buy-button">Comprar Agora</a>
-
-          <div className="action-buttons">
-            <button
-              className={`action-button ${isFavorite ? "added" : ""}`}
-              onClick={handleAddToFavorites}
-              disabled={isFavorite}
-            >
-              {isFavorite ? "Adicionado aos Favoritos" : "Adicionar aos Favoritos"}
-            </button>
-            <button
-              className={`action-button ${isReadLater ? "added" : ""}`}
-              onClick={handleAddToReadLater}
-              disabled={isReadLater}
-            >
-              {isReadLater ? "Adicionado para Ler Mais Tarde" : "Adicionar para Ler Mais Tarde"}
-            </button>
+        </div>
+        
+        <div className="book-info">
+          <h1>{book.title}</h1>
+          <h2>por {book.author}</h2>
+          
+          <div className="rating-container">
+            <div className="stars">
+              {[...Array(5)].map((_, i) => (
+                <FiStar 
+                  key={i} 
+                  className={i < Math.floor(book.rating) ? 'filled' : ''} 
+                />
+              ))}
+            </div>
+            <span>{book.rating.toFixed(1)}</span>
+          </div>
+          
+          <div className="genre-container">
+            {book.genre && book.genre.map((g, index) => (
+              <span key={index} className="genre-tag">{g}</span>
+            ))}
+          </div>
+          
+          <div className="book-description">
+            <h3>Sinopse</h3>
+            <p>{book.description || 'Sinopse não disponível.'}</p>
           </div>
         </div>
       </div>
-
-      <section className="book-reviews">
-        <h2>Avaliações</h2>
-        {reviews.length > 0 ? (
-          <div className="review-list">
-            {reviews.map((review) => (
-              <div key={review.id} className="review-card">
-                <p><strong>{review.user.username}:</strong> ⭐ {review.rating}</p>
-                <p>{review.comment}</p>
+      
+      {relatedBooks.length > 0 && (
+        <div className="related-books">
+          <h2>
+            <FiBookOpen /> Livros do mesmo gênero
+          </h2>
+          <div className="related-books-grid">
+            {relatedBooks.map((relatedBook, index) => (
+              <div 
+                key={index} 
+                className="related-book-card"
+                onClick={() => navigate(`/bookDetails/${encodeURIComponent(relatedBook.title)}`)}
+              >
+                {relatedBook.imageUrl ? (
+                  <img src={relatedBook.imageUrl} alt={relatedBook.title} className="related-book-cover" />
+                ) : (
+                  <div className="related-book-cover-placeholder">
+                    <FiBookOpen size={24} />
+                  </div>
+                )}
+                <h3>{relatedBook.title}</h3>
+                <p className="related-book-author">{relatedBook.author}</p>
+                <div className="related-book-rating">
+                  <FiStar className="filled" /> {relatedBook.rating.toFixed(1)}
+                </div>
               </div>
             ))}
           </div>
-        ) : (
-          <p>Sem avaliações para este livro.</p>
-        )}
-      </section>
-
-      <section className="related-books">
-        <h2>Mais livros em {book.genre}</h2>
-        <div className="related-books-grid">
-          {relatedBooks.map((relatedBook) => (
-            <div key={relatedBook.id} className="related-book-card">
-              <img src={relatedBook.imageUrl} alt={relatedBook.title} />
-              <h3>{relatedBook.title}</h3>
-              <p>{relatedBook.author}</p>
-              <Button bookTitle={relatedBook.title} />
-            </div>
-          ))}
         </div>
-      </section>
+      )}
     </div>
   );
-}
+};
+
+export default BookDetails;

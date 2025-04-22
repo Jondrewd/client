@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash.debounce';
-import api from '../../services/api'; // Certifique-se de ajustar o caminho para o seu serviço de API
-import './styles.css'; // Importe o arquivo CSS
+import api from '../../services/api'; 
+import './styles.css'; 
 
 const Autocomplete = ({ setTitle }) => {
     const [value, setValue] = useState('');

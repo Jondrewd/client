@@ -46,11 +46,11 @@ export default function Navbar({ onSearch }) {
         }
     };
 
-    const userOptions = ['Ver Perfil', 'Configurações', 'Logout'];
+    const userOptions = ['Perfil', 'Configurações', 'Logout'];
 
     const handleSelectOption = (option) => {
         switch (option) {
-            case 'Ver Perfil':
+            case 'Perfil':
                 navigate('/perfil');
                 break;
             case 'Configurações':
